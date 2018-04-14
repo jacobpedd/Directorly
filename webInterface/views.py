@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Contact
+from .models import Contact, Share
 from .form import ContactForm
 
 
@@ -34,9 +34,21 @@ def contact_details(request, pk):
     contact = get_object_or_404(Contact, pk=pk)
 
     if contact.user != request.user:
-        raise PermissionDenied("You do not have permission to see this contact")
+        return redirect('contact_public', pk=pk)
 
     return render(request, 'contact_details.html', {'contact': contact})
+
+
+@login_required
+def contact_public(request, pk):
+    contact = get_object_or_404(Contact, pk=pk)
+    shared_set = contact.share_set.all()
+    if not contact.public and request.user not in shared_set:
+        return render(request, 'contact_request_access.html', {'contact': contact})
+    else:
+        return render(request, 'contact_public.html', {'contact': contact})
+
+
 
 
 @login_required
@@ -56,3 +68,14 @@ def edit_contact(request, pk):
     else:
         form = ContactForm(instance=contact)
     return render(request, 'edit_contact.html', {'form': form})
+
+
+@login_required
+def contact_request(request, pk):
+    contact = get_object_or_404(Contact, pk=pk)
+    share = Share()
+    share.contact = contact
+    share.sharedWith = request.user
+    share.sharing = contact.user
+    share.save()
+    return render(request, 'request_confirmed.html')

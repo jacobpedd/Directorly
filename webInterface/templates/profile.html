@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+</head>
+<body>
+    <h1>{{ user.get_username }}</h1>
+    <a href="{% url 'new_contact' %}">New Contact</a>
+    <h2>Contacts</h2>
+    <ul>
+        {% for contact in contacts %}
+        <li><a href="{% url 'contact_details' pk=contact.pk %}">{{ contact.contactName }}</a></li>
+        {% endfor %}
+    </ul>
+    <h2>Requests</h2>
+    <ul>
+    {% for share in shares %}
+        <li>{{ share.user }} requests to see {{ share.contact }}</li>
+    {% endfor %}
+    </ul>
+</body>
+</html>
