@@ -2,10 +2,15 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
+
 from .models import Contact, Share
 from .form import ContactForm
 
 import vobject
+import urllib.request
+import qrcode
+
 
 def landing_page(request):
     return render(request, 'index.html')
@@ -45,7 +50,9 @@ def contact_details(request, pk):
     if contact.user != request.user:
         return redirect('contact_public', pk=pk)
 
-    return render(request, 'contact_details.html', {'contact': contact})
+    qr_url = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + request.build_absolute_uri(reverse('download_contact', kwargs={'pk': contact.pk}))
+
+    return render(request, 'contact_details.html', {'contact': contact, 'qr_url': qr_url})
 
 
 @login_required
@@ -89,7 +96,7 @@ def contact_request(request, pk):
     share.save()
     return render(request, 'request_confirmed.html')
 
-@login_required
+
 def download_contact(request, pk):
     contact = get_object_or_404(Contact, pk=pk)
     #TODO: Prove you have access to the contact
@@ -145,5 +152,14 @@ def generate_vcard(contact):
     if contact.company is not None:
         v.add('org')
         v.org.value = [contact.company]
+    if contact.photoURL is not None:
+        v.add('photo')
+        v.photo.type_param = 'jpg'
+        v.photo.encoding_param = 'b'
+        f = urllib.request.urlopen(contact.photoURL)
+        data = f.read()
+        f.close()
+        v.photo.value = data
+
     output = v.serialize()
     return output

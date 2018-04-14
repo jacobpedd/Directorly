@@ -1,8 +1,15 @@
 Babel==2.5.3
+certifi==2018.1.18
+chardet==3.0.4
 Django==1.11.12
 django-phonenumber-field==2.0.0
+idna==2.6
 phonenumberslite==8.9.3
+Pillow==5.1.0
 python-dateutil==2.7.2
 pytz==2018.4
+qrcode==6.0
+requests==2.18.4
 six==1.11.0
+urllib3==1.22
 vobject==0.9.5
