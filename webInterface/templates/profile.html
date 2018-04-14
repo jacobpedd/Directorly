@@ -13,10 +13,14 @@
         <li><a href="{% url 'contact_details' pk=contact.pk %}">{{ contact.contactName }}</a></li>
         {% endfor %}
     </ul>
+    <h2>Shared Contacts</h2>
+    {% for contact in shared_contacts %}
+        <li>{{ contact.user.get_username }} ({{ contact }})<a href="{% url 'approve_share' pk=contact.pk%}">Remove</a></li>
+    {% endfor %}
     <h2>Requests</h2>
     <ul>
     {% for share in shares %}
-        <li>{{ share.user }} requests to see {{ share.contact }}</li>
+        <li>{{ share.sharedWith.get_username }} requests to see {{ share.contact }} <a href="{% url 'approve_share' pk=share.pk%}">Approve</a></li>
     {% endfor %}
     </ul>
 </body>

@@ -68,8 +68,10 @@ def edit_contact(request, pk):
     if request.method == "POST":
         form = ContactForm(request.POST, instance=contact)
         if form.is_valid():
-            contact = form.save(commit=False)
-            contact.save()
+            new_contact = form.save(commit=False)
+            if not contact.__eq__(new_contact):
+                contact.contactName = "UPDATED"
+                contact.save()
 
             return redirect('profile')
     else:
