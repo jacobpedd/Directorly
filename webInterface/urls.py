@@ -9,5 +9,8 @@ urlpatterns = [
     url(r'^contact/(?P<pk>\d+)/edit$', views.edit_contact, name='edit_contact'),
     url(r'^contact/(?P<pk>\d+)/public', views.contact_public, name='contact_public'),
     url(r'^contact/(?P<pk>\d+)/request', views.contact_request, name='contact_request'),
+    url(r'^contact/(?P<pk>\d+)/download', views.download_contact, name='download_contact'),
     url(r'^share/(?P<pk>\d+)/approve', views.approve_share, name='approve_share'),
+    url(r'^share/(?P<pk>\d+)/remove', views.remove_share, name='remove_share'),
+    url(r'^sharing', views.sharing, name='sharing'),
 ]

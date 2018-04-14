@@ -1,9 +1,11 @@
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
+from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Contact, Share
 from .form import ContactForm
 
+import vobject
 
 def landing_page(request):
     return render(request, 'index.html')
@@ -68,11 +70,9 @@ def edit_contact(request, pk):
     if request.method == "POST":
         form = ContactForm(request.POST, instance=contact)
         if form.is_valid():
-            new_contact = form.save(commit=False)
-            if not contact.__eq__(new_contact):
-                contact.contactName = "UPDATED"
-                contact.save()
-
+            # TODO: if contact is updated tell subscribers
+            contact = form.save(commit=False)
+            contact.save()
             return redirect('profile')
     else:
         form = ContactForm(instance=contact)
@@ -89,14 +89,61 @@ def contact_request(request, pk):
     share.save()
     return render(request, 'request_confirmed.html')
 
+@login_required
+def download_contact(request, pk):
+    contact = get_object_or_404(Contact, pk=pk)
+    #TODO: Prove you have access to the contact
+    #TODO: Public access to public contacts
+
+    vcard_string = generate_vcard(contact)
+    filename = contact.firstName + contact.lastName + ".vcf"
+    response = HttpResponse(vcard_string, content_type="text/x-vCard")
+    response['Content-Disposition'] = 'attachment; filename=%s' % filename
+    return response
 
 @login_required
 def approve_share(request, pk):
     share = get_object_or_404(Share, pk=pk)
 
     if share.sharing != request.user:
-        raise PermissionDenied("You do not have permission to see this contact")
+        raise PermissionDenied("You do not have permission")
 
     share.accepted = True
     share.save()
     return redirect('profile')
+
+
+@login_required
+def remove_share(request, pk):
+    share = get_object_or_404(Share, pk=pk, accepted=True)
+
+    if share.sharing != request.user:
+        raise PermissionDenied("You do not have permission")
+
+    share.delete()
+    return redirect('profile')
+
+
+@login_required
+def sharing(request):
+    shares = Share.objects.filter(sharing=request.user)
+    return render(request, 'sharing.html', {'shares': shares})
+
+
+def generate_vcard(contact):
+    v = vobject.vCard()
+    v.add('n')
+    v.n.value = vobject.vcard.Name(family=contact.lastName, given=contact.firstName)
+    v.add('fn')
+    v.fn.value = "%s %s" % (contact.firstName, contact.lastName)
+    if contact.email is not None:
+        v.add('email')
+        v.email.value = contact.email
+    if contact.phone is not None:
+        v.add('tel')
+        v.tel.value = str(contact.phone)
+    if contact.company is not None:
+        v.add('org')
+        v.org.value = [contact.company]
+    output = v.serialize()
+    return output

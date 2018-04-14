@@ -6,8 +6,8 @@ from phonenumber_field.modelfields import PhoneNumberField
 class Contact(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     contactName = models.CharField(max_length=100, null=True, blank=True)
-    firstName = models.CharField(max_length=100, null=True, blank=True)
-    lastName = models.CharField(max_length=100, null=True, blank=True)
+    firstName = models.CharField(max_length=100)
+    lastName = models.CharField(max_length=100)
     company = models.CharField(max_length=100, null=True, blank=True)
     phone = PhoneNumberField(null=True, blank=True)
     email = models.EmailField(null=True, blank=True)
