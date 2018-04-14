@@ -12,7 +12,14 @@ def landing_page(request):
 @login_required
 def profile(request):
     contacts = request.user.contact_set.all()
-    return render(request, 'profile.html', {'contacts': contacts})
+    shares = Share.objects.filter(sharing=request.user, accepted=False)
+    shared = Share.objects.filter(sharedWith=request.user, accepted=True)
+    shared_contacts = set()
+    for share in shared:
+        shared_contacts.add(share.contact)
+    return render(request, 'profile.html', {'contacts': contacts,
+                                            'shares': shares,
+                                            'shared_contacts': shared_contacts})
 
 
 @login_required
@@ -79,3 +86,15 @@ def contact_request(request, pk):
     share.sharing = contact.user
     share.save()
     return render(request, 'request_confirmed.html')
+
+
+@login_required
+def approve_share(request, pk):
+    share = get_object_or_404(Share, pk=pk)
+
+    if share.sharing != request.user:
+        raise PermissionDenied("You do not have permission to see this contact")
+
+    share.accepted = True
+    share.save()
+    return redirect('profile')
