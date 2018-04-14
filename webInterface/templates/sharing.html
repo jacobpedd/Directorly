@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shares</title>
+</head>
+<body>
+    <h1>You are sharing your contact with:</h1>
+    <ul>
+        {% for share in shares %}
+            <li>{{ share.sharedWith }} <a href="{% url 'contact_details' pk=share.contact.pk %}">{{ share.contact }}</a> <a href="{% url 'remove_share' pk=share.pk %}">Remove</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

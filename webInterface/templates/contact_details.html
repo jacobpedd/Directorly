@@ -6,5 +6,6 @@
 </head>
 <body>
     <h1>{{ contact.contactName }}  <a href="{% url 'edit_contact' pk=contact.pk %}">Edit</a></h1>
+    <a href="{% url 'download_contact' pk=contact.pk %}">Download</a>
     <p>Number: {{ contact.phone }}</p>
 </html>

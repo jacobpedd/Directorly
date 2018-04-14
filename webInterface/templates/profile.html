@@ -23,5 +23,6 @@
         <li>{{ share.sharedWith.get_username }} requests to see {{ share.contact }} <a href="{% url 'approve_share' pk=share.pk%}">Approve</a><a href="{% url 'remove_share' pk=share.pk%}">Deny</a></li>
     {% endfor %}
     </ul>
+    <a href="{% url 'sharing' %}">People you share with</a>
 </body>
 </html>
