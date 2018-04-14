@@ -1,0 +1,18 @@
+BEGIN:VCARD
+VERSION:2.1
+N:Payne;Tena;;Ms.
+FN:Tena Payne
+ORG:Earthborn Studios Inc
+TITLE:Owner/Designer
+PHOTO;JPG:http://earthbornpottery.net/wp-content/uploads/2012/08/gallery.jpg
+TEL;WORK;VOICE:(205) 702-7055
+TEL;HOME;VOICE:(205) 613-0280
+ADR;WORK;PREF:;;7575 Parkway Dr;Leeds;AL;35094;United States of America
+LABEL;WORK;PREF;ENCODING=QUOTED-PRINTABLE;CHARSET=UTF-8:100 Parkway DR=0D=
+ =0ALeeds\, AL 35094=0D=0AUnited States of America
+ADR;HOME:;;1337 Montevallo Rd;Leeds;AL;35094;United States of America
+LABEL;HOME;ENCODING=QUOTED-PRINTABLE;CHARSET=UTF-8:42 Montevallo Rd=0D=0A=
+ Leeds, AL 35094=0D=0AUnited States of America
+EMAIL:earthbornpottery@yahoo.com
+REV:20080424T195243Z
+END:VCARD
