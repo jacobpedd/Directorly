@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+    <h1>{{ group.name }}</h1>
+    <h5>Admin: {{ group.admin }}</h5>
+
+    <h3>Members</h3>
+    <!--<p><a class="btn btn-primary" href="">Add new</a></p>-->
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Contact</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for contact in group.contacts.all %}
+            <tr>
+                <td class="col-md-3"><a href="">{{ contact.user.get_username }}</a></td>
+                <td class="col-md-3"><a href="{% url 'contact_public' pk=contact.pk %}">{{ contact }}</a></td>
+                <td class="col-md-9" id="">
+                    <button class="btn btn-danger">Remove</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <!--<p><a class="btn btn-primary" href="">Download all</a></p>-->
+{% endblock %}

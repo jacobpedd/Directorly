@@ -1,15 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Shares</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
     <h1>You are sharing your contact with:</h1>
-    <ul>
-        {% for share in shares %}
-            <li>{{ share.sharedWith }} <a href="{% url 'contact_details' pk=share.contact.pk %}">{{ share.contact }}</a> <a href="{% url 'remove_share' pk=share.pk %}">Remove</a></li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Contact</th>
+                <th>User</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for share in shares %}
+            <tr>
+                <td class="col-md-3"><a href="">{{ share.contact }}</a></td>
+                <td class="col-md-3"><a href="">{{ share.sharedWith.get_username }}</a></td>
+                <td class="col-md-9" id="">
+                    <button class="btn btn-danger">Remove</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

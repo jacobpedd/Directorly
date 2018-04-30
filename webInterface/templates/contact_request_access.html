@@ -1,9 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ contact.contactName }}</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
     <p>You do not have access to this contact <a href="{% url 'contact_request' pk=contact.pk %}">Request it</a></p>
-</html>
+{% endblock %}

@@ -4,8 +4,8 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 
-from .models import Contact, Share
-from .form import ContactForm
+from .models import Contact, Share, Group, GroupInvite
+from .form import ContactForm, GroupForm
 
 import vobject
 import urllib.request
@@ -21,12 +21,16 @@ def profile(request):
     contacts = request.user.contact_set.all()
     shares = Share.objects.filter(sharing=request.user, accepted=False)
     shared = Share.objects.filter(sharedWith=request.user, accepted=True)
+    invites = GroupInvite.objects.filter(invited=request.user)
+    shared_groups = Group.objects.filter(admin=request.user)
     shared_contacts = set()
     for share in shared:
         shared_contacts.add(share.contact)
     return render(request, 'profile.html', {'contacts': contacts,
                                             'shares': shares,
-                                            'shared_contacts': shared_contacts})
+                                            'shared_contacts': shared_contacts,
+                                            'shared_groups': shared_groups,
+                                            'invites': invites})
 
 
 @login_required
@@ -59,10 +63,12 @@ def contact_details(request, pk):
 def contact_public(request, pk):
     contact = get_object_or_404(Contact, pk=pk)
     shared_set = contact.share_set.all()
+    qr_url = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + request.build_absolute_uri(
+        reverse('download_contact', kwargs={'pk': contact.pk}))
     if not contact.public and request.user not in shared_set:
         return render(request, 'contact_request_access.html', {'contact': contact})
     else:
-        return render(request, 'contact_public.html', {'contact': contact})
+        return render(request, 'contact_public.html', {'contact': contact, 'qr_url': qr_url})
 
 
 
@@ -133,8 +139,34 @@ def remove_share(request, pk):
 
 @login_required
 def sharing(request):
-    shares = Share.objects.filter(sharing=request.user)
+    shares = Share.objects.filter(sharing=request.user, accepted=True)
     return render(request, 'sharing.html', {'shares': shares})
+
+
+@login_required
+def new_group(request):
+    if request.method == "POST":
+        form = GroupForm(request.POST)
+        if form.is_valid():
+            group = form.save(commit=False)
+            group.admin = request.user
+            group.save()
+            return redirect('group_details', pk=group.pk)
+    else:
+        form = GroupForm()
+    return render(request, 'new_group.html', {'form': form})
+
+
+@login_required
+def group_details(request, pk):
+    group = get_object_or_404(Group, pk=pk)
+
+    if group.admin != request.user:
+        return render(request, 'group_details.html', {'group': group})
+        #return redirect('group_public', pk=pk)
+
+    return render(request, 'group_details.html', {'group': group})
+
 
 
 def generate_vcard(contact):

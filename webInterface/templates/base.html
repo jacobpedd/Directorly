@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Directorly</title>
+  <script src="https://code.jquery.com/jquery.min.js"></script>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+  <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script type="text/javascript">
+        $(document).ready(function() {
+            $('.btn-success#accept').click(function() {
+                $('.btn-success#accept').hide();
+                $('.btn-danger#deny').hide();
+
+                $("#firstrow").append("<h3 style='display: inline'>Accepted:</h3> &nbsp;&nbsp;&nbsp;&nbsp;");
+                $("#firstrow").append("<i class='fab fa-facebook-f fa-3x'></i>&nbsp;&nbsp;&nbsp;");
+                $("#firstrow").append("<i class='fab fa-linkedin-in fa-3x'></i>&nbsp;&nbsp;&nbsp;");
+                $("#firstrow").append("<i class='fab fa-twitter fa-3x'></i>");
+            });
+        });
+  </script>
+</head>
+<body>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="{% url 'profile' %}">Directorly</a>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>

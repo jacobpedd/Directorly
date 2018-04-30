@@ -1,28 +1,106 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Profile</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block content %}
     <h1>{{ user.get_username }}</h1>
-    <a href="{% url 'new_contact' %}">New Contact</a>
-    <h2>Contacts</h2>
-    <ul>
-        {% for contact in contacts %}
-        <li><a href="{% url 'contact_details' pk=contact.pk %}">{{ contact.contactName }}</a></li>
-        {% endfor %}
-    </ul>
+    <h2>Contacts <a class="btn btn-primary" href="{% url 'new_contact' %}">New Contact</a></h2>
+        <div class="container">
+          <div class="row">
+              {% for contact in contacts %}
+            <div class="col-sm">
+            <div class="card" style="width: 18rem;">
+              <div class="card-body">
+                <h5 class="card-title"><a href="{% url 'contact_details' pk=contact.pk %}">{{ contact.contactName }}</a></h5>
+              </div>
+            </div>
+            </div>
+              {% endfor %}
+          </div>
+        </div>
+
     <h2>Shared Contacts</h2>
-    {% for contact in shared_contacts %}
-        <li>{{ contact.user.get_username }} ({{ contact }})<a href="{% url 'remove_share' pk=contact.pk%}">Remove</a></li>
-    {% endfor %}
+        <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Contact</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for contact in shared_contacts %}
+            <tr>
+                <td class="col-md-3"><a href="">{{ contact.user.get_username }}</a></td>
+                <td class="col-md-3"><a href="{% url 'contact_details' pk=contact.pk %}">{{ contact }}</a></td>
+                <td class="col-md-9" id="">
+                    <button class="btn btn-danger">Remove</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'sharing' %}">You share with</a>
+
     <h2>Requests</h2>
-    <ul>
-    {% for share in shares %}
-        <li>{{ share.sharedWith.get_username }} requests to see {{ share.contact }} <a href="{% url 'approve_share' pk=share.pk%}">Approve</a><a href="{% url 'remove_share' pk=share.pk%}">Deny</a></li>
-    {% endfor %}
-    </ul>
-    <a href="{% url 'sharing' %}">People you share with</a>
-</body>
-</html>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Reuquested Contact</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for share in shares %}
+            <tr>
+                <td class="col-md-3"><a href="">{{ share.sharedWith.get_username }}</a></td>
+                <td class="col-md-3"><a href="">{{ share.contact }}</a></td>
+                <td class="col-md-9" id="">
+                    <button class="btn btn-success">Accept</button>
+                    <button class="btn btn-danger">Deny</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Your Groups</h2>
+        <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for group in shared_groups %}
+            <tr>
+                <td class="col-md-3"><a href="{% url 'group_details' pk=group.pk %}">{{ group.name }}</a></td>
+                <td class="col-md-9" id="">
+                    <button class="btn btn-danger">Leave</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Group Invites</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for invite in invites %}
+            <tr>
+                <td class="col-md-3"><a href="{% url 'group_details' pk=invite.group.pk %}">{{ invite.group }}</a></td>
+                <td class="col-md-9" id="">
+                    <button class="btn btn-success">Accept</button>
+                    <button class="btn btn-danger">Deny</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

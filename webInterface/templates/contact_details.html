@@ -1,13 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ contact.contactName }}</title>
-</head>
-<body>
-    <h1>{{ contact.contactName }}  <a href="{% url 'edit_contact' pk=contact.pk %}">Edit</a></h1>
-    <a href="{% url 'download_contact' pk=contact.pk %}">Download</a>
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{{ contact.contactName }}  <a class="btn btn-primary" href="{% url 'edit_contact' pk=contact.pk %}">Edit</a></h1>
+    <img  height="200" width="200" class="img-responsive center-block" src="{{ contact.photoURL }}">
+    <br><br>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Field</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="col-md-3">First Name</td>
+                <td class="col-md-3">{{ contact.firstName }}</a></td>
+            </tr>
+            <tr>
+                <td class="col-md-3">Last Name</td>
+                <td class="col-md-3">{{ contact.lastName }}</a></td>
+            </tr>
+            <tr>
+                <td class="col-md-3">Comapny</td>
+                <td class="col-md-3">{{ contact.company }}</a></td>
+            </tr>
+            <tr>
+                <td class="col-md-3">Phone</td>
+                <td class="col-md-3">{{ contact.phone }}</a></td>
+            </tr>
+            <tr>
+                <td class="col-md-3">Email</td>
+                <td class="col-md-3">{{ contact.email }}</a></td>
+            </tr>
+            <tr>
+                <td class="col-md-3">Address</td>
+                <td class="col-md-3">{{ contact.address }}</a></td>
+            </tr>
+            <tr>
+                <td class="col-md-3">Public</td>
+                <td class="col-md-3">{{ contact.public }}</a></td>
+            </tr>
+
+        </tbody>
+    </table>
+<a class="btn btn-primary" href="{% url 'download_contact' pk=contact.pk %}">Download</a>
     <h2>QR Code</h2>
     <img src="{{ qr_url }}">
-    <p>Number: {{ contact.phone }}</p>
-</html>
+{% endblock %}

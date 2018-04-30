@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ contact.contactName }}</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block content %}
     <h1>{{ contact.contactName }}</h1>
-    <p>Number: {{ contact.phone }}</p>
-</html>
+    <a class="btn btn-primary" href="{% url 'download_contact' pk=contact.pk %}">Download</a>
+    <h2>QR Code</h2>
+    <img src="{{ qr_url }}">
+{% endblock %}
