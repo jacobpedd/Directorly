@@ -1,5 +1,7 @@
 # Directorly
 
+![Screenshot](img/screenshot.png)
+
 Direcotly is a project that I worked on at the 24 hour Y Combinator hackathon in April of 2018. 
 The goal of the project was to make a service to help manage contacts. The implementation 
 was in two facets:
@@ -16,3 +18,8 @@ were to continue some features I would like to see are:
 
 This project was a great experience to work on, for my first hackathon I was very happy 
 with the results!
+
+Thanks to my team:
+* Rishabh Bindal
+* Meera Balakumar
+* Anith Pantel
